@@ -32,6 +32,10 @@ $9.71 of agent spend:
 
 ---
 
+The six capabilities this needs in order to be a product are specified in
+[`docs/mvp-feature-list.md`](docs/mvp-feature-list.md), with honest status on
+each.
+
 ## What's here
 
 | | |
