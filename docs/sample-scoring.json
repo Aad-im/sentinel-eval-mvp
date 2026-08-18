@@ -1,0 +1,90 @@
+{
+  "counts": {
+    "rawClaims": 15,
+    "afterDedupe": 14,
+    "published": 7,
+    "suppressed": 2,
+    "confirmed": 7,
+    "flaky": 0,
+    "truePositives": 7,
+    "falsePositives": 0
+  },
+  "attributionRan": true,
+  "falsePositiveRatePct": 0,
+  "unsuppressedFalsePositiveRatePct": 14.3,
+  "suppressionYieldPct": 14.3,
+  "recall": {
+    "activeDefects": 8,
+    "found": 7,
+    "recallPct": 87.5,
+    "foundIds": [
+      "BUG-001",
+      "BUG-002",
+      "BUG-003",
+      "BUG-004",
+      "BUG-006",
+      "BUG-007",
+      "BUG-008"
+    ],
+    "missedIds": [
+      "BUG-005"
+    ]
+  },
+  "bySuppressionReason": {
+    "CONTROL_ALSO_FIRES": 2
+  },
+  "byDimension": {
+    "auth-access": {
+      "reported": 2,
+      "published": 2,
+      "confirmed": 2,
+      "suppressed": 0,
+      "truePositives": 2
+    },
+    "core-flows": {
+      "reported": 4,
+      "published": 2,
+      "confirmed": 2,
+      "suppressed": 2,
+      "truePositives": 2
+    },
+    "data-integrity": {
+      "reported": 1,
+      "published": 1,
+      "confirmed": 1,
+      "suppressed": 0,
+      "truePositives": 1
+    },
+    "accessibility": {
+      "reported": 1,
+      "published": 1,
+      "confirmed": 1,
+      "suppressed": 0,
+      "truePositives": 1
+    },
+    "perf-visual": {
+      "reported": 1,
+      "published": 1,
+      "confirmed": 1,
+      "suppressed": 0,
+      "truePositives": 1
+    }
+  },
+  "byModel": {
+    "claude-opus-5": {
+      "reported": 7,
+      "published": 5,
+      "truePositives": 5,
+      "suppressed": 2,
+      "falsePositiveRatePct": 0
+    },
+    "claude-sonnet-5": {
+      "reported": 2,
+      "published": 2,
+      "truePositives": 2,
+      "suppressed": 0,
+      "falsePositiveRatePct": 0
+    }
+  },
+  "honeypotsInPlace": 5
+}

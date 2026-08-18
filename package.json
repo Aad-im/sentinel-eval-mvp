@@ -1,0 +1,18 @@
+{
+  "name": "sentinel-mvp",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "Agentic evaluation of a live web app, with a verification layer that measures its own false-positive rate.",
+  "scripts": {
+    "app": "node ledgerly/server.js",
+    "app:fixed": "LEDGERLY_BUGS=none PORT=4311 node ledgerly/server.js",
+    "eval": "node sentinel/run.js",
+    "test": "node sentinel/tests/journeys.test.mjs && node sentinel/tests/dialogs.test.mjs && node sentinel/tests/verification.test.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.3.234",
+    "express": "^5.1.0",
+    "playwright": "^1.62.1"
+  }
+}
