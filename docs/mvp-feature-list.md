@@ -100,12 +100,22 @@ recipient who never had the repo, and there is a retention window.
 
 ---
 
-## 4. Two output channels: verified defects and experience review
+## 4. Two reports: the hard one and the soft one
 
-**What.** Agents report on two channels with different standards of proof.
-Defects are probe-verified. Experience notes — friction, confusion, missing
-feedback, praise — are judgement, labelled as such, and count toward neither the
-defect list nor the false-positive rate. Plus a 1–5 score per journey.
+**What.** Every run produces two write-ups with different standards of proof and
+different readers.
+
+The **defect report** is probe-verified and adversarial: what is broken, proven.
+Its reader is an engineer who will fix it.
+
+The **experience report** is what the app was actually like to use and what would
+make it better — friction, confusion, missing feedback, dead ends, and praise —
+plus a 1–5 score per journey. It is judgement, labelled as such, and counts
+toward neither the defect list nor the false-positive rate. Its reader is a
+product or design lead who will prioritise it.
+
+Ideas for making the second report substantially better are in
+[The experience report](#the-experience-report-ideas-worth-building) below.
 
 **Why it is non-negotiable.** A verified defect list is not a product review, and
 most of what makes software bad to use never throws an error. The separation is
@@ -119,10 +129,14 @@ findings instead of being lost.
 **What exists.** Both channels, the journey scorecard sorted worst-first, and a
 `checkedButHealthy` list per agent so silence is not ambiguous.
 
-**What is missing.** Nothing structural. Experience notes are not deduplicated
-across agents, so the same friction can appear several times.
+**What is missing.** The soft report is currently a *section* of the defect
+report rather than its own document, so it reaches the engineer and not the
+person who would act on it. Notes are also not deduplicated across agents — one
+journey drew eight notes in our run, several restating the same friction.
 
-**Done when.** Notes are grouped by journey and near-duplicates merged.
+**Done when.** The two reports are separate artifacts that can be delivered to
+different people, and notes are clustered per journey with near-duplicates
+merged.
 
 ---
 
@@ -179,12 +193,118 @@ and a run ends by emailing the report to a configured address.
 
 ---
 
+## The experience report: ideas worth building
+
+The defect half of this product has a clear ceiling — find real bugs, prove them,
+do not cry wolf. The soft half has a much higher one, because almost everything
+that makes software unpleasant never throws an error, and nobody is currently
+selling a machine-generated review of it that is worth reading.
+
+These are ordered by how much they would improve that report, not by effort.
+
+### 1. Evaluate the cold start — we structurally cannot see it today
+
+The single largest blind spot, and it was created by our own wedge. Agents are
+handed a pre-authenticated session against a fully seeded account, because that
+is what made runs fast and non-flaky. The cost is that the first-run experience
+is invisible to us: in the canonical run all 16 seeds were the populated
+`default` fixture, the `empty-org` fixture was never once used, and only 2 of 36
+page visits touched `/login`.
+
+So we have nothing to say about the experience that decides whether a trial
+converts — signing up, an empty account with no data, what the product tells you
+to do first, the moment before the app is useful. Empty states are exactly where
+software is worst and where feedback is most valuable.
+
+**Build.** A cold-start agent that begins signed out, on an empty org, with no
+seeded data, and is asked only to become a productive user. Report where it got
+stuck. This is a different lens, not a sixth dimension of the same one.
+
+### 2. Weight friction by how often the action happens
+
+A rough edge in sign-in is met every session. A rough edge in deleting a customer
+is met twice a year. Right now both arrive as "moderate" and the reader has to
+supply the frequency themselves.
+
+**Build.** Journey frequency in the target profile (per-session / daily / weekly /
+rare), and rank notes by friction × frequency. It turns a flat list into a
+priority order the customer did not have to compute.
+
+### 3. Keep disagreement instead of averaging it away
+
+Four agents scored "Inspect an invoice" 2, 4, 4 and 3. The report showed 3.3.
+The spread was the interesting part and we deleted it: when independent reviewers
+disagree that sharply, the experience is inconsistent or depends on context, and
+that is worth more than the mean.
+
+**Build.** Show the distribution, not just the average. Flag any journey where
+the spread exceeds a threshold as "inconsistent experience" and quote the
+dissenting agent's reason verbatim.
+
+### 4. Give the soft report evidence too
+
+Defects get screenshots, video and traces. Experience notes get prose, even
+though "the modal is cramped on a phone" and "saving is silent" are far more
+persuasive as a picture and a five-second clip. The capture already exists; the
+notes simply are not wired to it.
+
+**Build.** Let an agent attach the screenshot or video segment it was looking at
+when it wrote a note. Near-free, and it makes the soft report the one people
+actually forward.
+
+### 5. Rank by effort, and lead with the cheap wins
+
+Twenty-seven suggestions is a wall, and a wall gets skimmed. Some of ours were a
+one-line copy change ("say *No paid invoices* when a filter emptied the list");
+others were real design work.
+
+**Build.** An effort estimate per suggestion, and a short "three things worth
+doing this week" block at the top — high frequency, high friction, low effort.
+That block is what makes the report get acted on rather than filed.
+
+### 6. Judge against the customer's intent, not generic taste
+
+Agents currently review with no idea what the product is trying to be or who it
+is for. Some friction is deliberate: a confirmation step, a deliberately slow
+destructive action, a power-user shortcut that is meant to be discoverable only
+by power users. We call those confusing because we have no way to know better.
+
+**Build.** Let the customer state the target user, the product's intent for each
+journey, and any deliberate friction, in the target profile. This is the soft
+report's version of the negative control: a way to separate "bad" from
+"not what I would have done".
+
+### 7. Trend the scores, do not just print them
+
+A single score is an opinion. The same score across releases is a metric. "Bill
+someone dropped from 4.1 to 2.4 after last week's release" is a sentence a
+product lead will act on immediately, and it is the strongest argument for
+running us continuously rather than once.
+
+**Build.** Persist journey scores per run and chart them over time. Depends on
+run-over-run identity (feature 6), which is the main reason that feature earns
+its slot.
+
+### 8. Open with a narrative, not a list
+
+The current report opens with a scorecard table. An exec reads five sentences.
+
+**Build.** A short synthesis at the top, written after everything else, that says
+what this product is like to use in plain prose — the strongest thing about it,
+the worst thing about it, and the one change that would most improve it.
+
+---
+
 ## Priority
 
 1, 2, 3 exist and hold up; the work is generalising 1 off our demo app. 5 is the
 biggest genuine hole — without adjudication we cannot quote a false-positive rate
 on a real pilot, and that is the number the pilot turns on. 6 is small but
 decides whether run two is worth paying for.
+
+Within the soft report, the cold-start lens is the one to build first. It is the
+only item on that list that adds something we currently cannot see at all, rather
+than presenting better what we already collect.
 
 | # | Feature | State | Next move |
 |---|---|---|---|
@@ -199,8 +319,8 @@ decides whether run two is worth paying for.
 
 ## Explicitly out of scope for the MVP
 
-A dashboard, an auth system, and billing. The deliverable is a markdown file we
-email. Also out: CI integration, self-healing test suites, and evaluating
+A dashboard, an auth system, and billing. The deliverable is two markdown files
+we email — the defect report and the experience report. Also out: CI integration, self-healing test suites, and evaluating
 anything other than a running web app through a browser.
 
 One rule worth keeping: agents get browser tools only. File and shell access is

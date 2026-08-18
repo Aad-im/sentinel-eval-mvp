@@ -133,10 +133,12 @@ measurably wrong.
 
 ---
 
-## Two outputs, deliberately separated
+## Two reports, deliberately separated
 
-A verified defect list is not a product review, so agents report on two channels
-with different standards of proof:
+A verified defect list is not a product review, so every run produces two
+write-ups with different standards of proof and different readers — a defect
+report for whoever will fix it, and a softer report on what the app was actually
+like to use and what would make it better:
 
 | | Defects | Experience notes |
 |---|---|---|
